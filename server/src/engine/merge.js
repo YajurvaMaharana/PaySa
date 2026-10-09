@@ -181,6 +181,19 @@ export function merge(rules, ai, fallbackText = "") {
   const extractedText =
     (ai && ai.extractedText) || fallbackText || "";
 
+  // ── 6. Confidence Scoring ────────────────────────────────────────────────
+  // Mocking confidence for now: 0.92 for AI+Rules, 0.85 for Rules-only fallback
+  const confidence = source === "AI+RULES" ? 0.92 : 0.85;
+  
+  let confidenceMessage = "";
+  if (finalScore >= 60 && confidence >= 0.85) {
+    confidenceMessage = "CONFIRMED HIGH RISK: Severe threat detected.";
+  } else if ((finalScore >= 30 && finalScore < 60) || (confidence >= 0.60 && confidence < 0.85)) {
+    confidenceMessage = "POTENTIAL RISK: Verify through official sources before acting.";
+  } else {
+    confidenceMessage = "UNCERTAIN ANALYSIS: Do not share credentials. Verify independently.";
+  }
+
   return {
     id: randomUUID(),
     score: finalScore,
@@ -195,6 +208,8 @@ export function merge(rules, ai, fallbackText = "") {
     ruleScore: rules.ruleScore,
     aiScore,
     source,
+    confidence,
+    confidenceMessage,
     disclaimer: DISCLAIMER,
   };
 }

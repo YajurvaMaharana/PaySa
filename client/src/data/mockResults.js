@@ -3,6 +3,8 @@ export const mockResults = [
     id: "mock-high",
     score: 85,
     level: "HIGH",
+    confidence: 0.94,
+    confidenceMessage: "CONFIRMED HIGH RISK: Severe threat detected.",
     recommendation: "PAUSE",
     category: "JOB_TASK",
     categoryLabel: {

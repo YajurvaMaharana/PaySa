@@ -10,6 +10,7 @@ import SafetyCircleModal from '../components/SafetyCircleModal';
 import { PanicMeter } from '../components/PanicMeter';
 import { ScamDnaCard } from '../components/ScamDnaCard';
 import { ScamTwins } from '../components/ScamTwins';
+import { ConfidenceBadge } from '../components/ConfidenceBadge';
 
 const SIGNAL_COLORS = {
   URGENCY: 'bg-orange-100 text-orange-800 border-orange-200',
@@ -208,14 +209,19 @@ export const Result = () => {
       <Card className="relative -mt-8 bg-white shadow-md p-5 flex flex-col items-center border-t-0 rounded-t-3xl rounded-b-xl">
         <Gauge score={result.score} level={level} />
         
-        <div className="mt-4 text-center">
-          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-bold uppercase tracking-widest ${
-            level === 'HIGH' ? 'bg-danger/10 text-danger' : 
-            (level === 'MEDIUM' ? 'bg-warn/10 text-warn-dark' : 'bg-safe/10 text-safe')
-          }`}>
-            {level}
-          </span>
-          <p className="mt-2 text-navy font-semibold text-lg">{result.categoryLabel[lang]}</p>
+        <div className="mt-4 flex flex-col items-center">
+          <div className="flex items-center gap-2">
+            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-bold uppercase tracking-widest ${
+              level === 'HIGH' ? 'bg-danger/10 text-danger' : 
+              (level === 'MEDIUM' ? 'bg-warn/10 text-warn-dark' : 'bg-safe/10 text-safe')
+            }`}>
+              {level}
+            </span>
+            {result.confidence && (
+              <ConfidenceBadge confidence={result.confidence} message={result.confidenceMessage} />
+            )}
+          </div>
+          <p className="mt-2 text-navy font-semibold text-lg text-center">{result.categoryLabel[lang]}</p>
         </div>
 
         <p className="mt-4 text-xs text-gray-400 font-medium">
@@ -251,9 +257,22 @@ export const Result = () => {
           {t('result.action.verifyOfficial')}
         </Button>
 
-        <Button variant="outline" className="w-full min-h-[56px] text-lg font-semibold" onClick={() => setTrustedModalOpen(true)}>
-          {t('result.action.tellTrusted')}
-        </Button>
+        {/* Smart Family Escalation Trigger */}
+        {result.score >= 85 && result.confidence >= 0.80 ? (
+          <div className="relative">
+            <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 z-10">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-4 w-4 bg-brand border-2 border-white"></span>
+            </span>
+            <Button variant="outline" className="w-full min-h-[56px] text-lg font-bold border-brand text-brand shadow-sm bg-brand/5 relative" onClick={() => setTrustedModalOpen(true)}>
+              {t('result.action.tellTrusted')}
+            </Button>
+          </div>
+        ) : (
+          <Button variant="outline" className="w-full min-h-[56px] text-lg font-semibold" onClick={() => setTrustedModalOpen(true)}>
+            {t('result.action.tellTrusted')}
+          </Button>
+        )}
 
         {level === 'LOW' && (
           <Button variant="primary" className="w-full min-h-[56px] text-lg font-bold shadow-sm">

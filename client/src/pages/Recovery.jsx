@@ -21,6 +21,7 @@ import { useT } from '../i18n';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import SafetyCircleModal from '../components/SafetyCircleModal';
+import { EvidenceVault } from '../components/EvidenceVault';
 
 export const Recovery = () => {
   const { t, lang } = useT();
@@ -55,66 +56,12 @@ export const Recovery = () => {
 
   const completedCount = [1, 2, 3, 4, 5, 6].filter((num) => checkedSteps[num]).length;
 
-  // ── 3. Evidence Form persisted in localStorage ───────────────────────────
-  const [evidence, setEvidence] = useState(() => {
-    try {
-      const saved = localStorage.getItem('tp_evidence_form');
-      return saved
-        ? JSON.parse(saved)
-        : { amount: '', utr: '', scammer: '', dateTime: '', description: '' };
-    } catch {
-      return { amount: '', utr: '', scammer: '', dateTime: '', description: '' };
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('tp_evidence_form', JSON.stringify(evidence));
-    } catch (e) {
-      console.warn('Failed to save evidence form', e);
-    }
-  }, [evidence]);
-
-  const handleEvidenceChange = (field, value) => {
-    setEvidence((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleClearEvidence = () => {
-    setEvidence({ amount: '', utr: '', scammer: '', dateTime: '', description: '' });
-  };
-
   // ── 4. Toast notifications ────────────────────────────────────────────────
   const [toastMessage, setToastMessage] = useState(null);
 
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);
-  };
-
-  const handleCopySummary = () => {
-    const isHi = lang === 'hi';
-    const lines = isHi
-      ? [
-          '=== साइबर अपराध / बैंक धोखाधड़ी विवरण सारांश ===',
-          `• गंवाई गई राशि: ₹${evidence.amount || 'अनुपलब्ध'}`,
-          `• ट्रांजेक्शन ID / UTR: ${evidence.utr || 'अनुपलब्ध'}`,
-          `• संदिग्ध नंबर / UPI ID: ${evidence.scammer || 'अनुपलब्ध'}`,
-          `• घटना की तारीख व समय: ${evidence.dateTime || 'अनुपलब्ध'}`,
-          `• विवरण: ${evidence.description || 'अनुपलब्ध'}`,
-          '• रिपोर्टिंग माध्यम: TrustPause (https://cybercrime.gov.in)',
-        ]
-      : [
-          '=== CYBERCRIME & BANK FRAUD EVIDENCE SUMMARY ===',
-          `• Amount Lost: ₹${evidence.amount || 'Not provided'}`,
-          `• Transaction ID / UTR: ${evidence.utr || 'Not provided'}`,
-          `• Suspect Number / UPI ID: ${evidence.scammer || 'Not provided'}`,
-          `• Date & Time: ${evidence.dateTime || 'Not provided'}`,
-          `• Incident Description: ${evidence.description || 'Not provided'}`,
-          '• Reported via: TrustPause (https://cybercrime.gov.in)',
-        ];
-
-    navigator.clipboard?.writeText(lines.join('\n'));
-    showToast(t('recovery.evidence.copied'));
   };
 
   const handleCopyChecklist = () => {
@@ -563,103 +510,8 @@ export const Recovery = () => {
         </Card>
       </div>
 
-      {/* ── Evidence Summary Generator ──────────────────────────────────────── */}
-      <Card className="p-5 sm:p-6 bg-white space-y-4 shadow-sm border border-gray-200">
-        <div className="flex items-start justify-between gap-2">
-          <div className="space-y-1">
-            <h3 className="text-lg font-bold text-navy flex items-center gap-2">
-              <FileText className="h-5 w-5 text-brand" />
-              {t('recovery.evidence.title')}
-            </h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              {t('recovery.evidence.desc')}
-            </p>
-          </div>
-          <button
-            onClick={handleClearEvidence}
-            className="text-xs text-gray-400 hover:text-danger flex items-center gap-1 p-1 shrink-0"
-            title={t('recovery.evidence.clear')}
-          >
-            <RotateCcw className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">{t('recovery.evidence.clear')}</span>
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-          <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">
-              {t('recovery.evidence.amount')}
-            </label>
-            <input
-              type="text"
-              className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand focus:border-brand"
-              placeholder={t('recovery.evidence.amountPlaceholder')}
-              value={evidence.amount}
-              onChange={(e) => handleEvidenceChange('amount', e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">
-              {t('recovery.evidence.utr')}
-            </label>
-            <input
-              type="text"
-              className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand focus:border-brand"
-              placeholder={t('recovery.evidence.utrPlaceholder')}
-              value={evidence.utr}
-              onChange={(e) => handleEvidenceChange('utr', e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">
-              {t('recovery.evidence.scammer')}
-            </label>
-            <input
-              type="text"
-              className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand focus:border-brand"
-              placeholder={t('recovery.evidence.scammerPlaceholder')}
-              value={evidence.scammer}
-              onChange={(e) => handleEvidenceChange('scammer', e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">
-              {t('recovery.evidence.dateTime')}
-            </label>
-            <input
-              type="text"
-              className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand focus:border-brand"
-              placeholder={t('recovery.evidence.dateTimePlaceholder')}
-              value={evidence.dateTime}
-              onChange={(e) => handleEvidenceChange('dateTime', e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold text-gray-700 mb-1">
-            {t('recovery.evidence.description')}
-          </label>
-          <textarea
-            rows={3}
-            className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm resize-none focus:ring-2 focus:ring-brand focus:border-brand"
-            placeholder={t('recovery.evidence.descriptionPlaceholder')}
-            value={evidence.description}
-            onChange={(e) => handleEvidenceChange('description', e.target.value)}
-          />
-        </div>
-
-        <Button
-          onClick={handleCopySummary}
-          className="w-full text-base font-bold min-h-[50px] shadow-sm"
-        >
-          <Copy className="h-4 w-4 mr-2" />
-          {t('recovery.evidence.copy')}
-        </Button>
-      </Card>
+      {/* ── Evidence Vault ──────────────────────────────────────── */}
+      <EvidenceVault lang={lang} />
 
       {/* ── Warning Card ────────────────────────────────────────────────────── */}
       <Card className="p-4 sm:p-5 bg-rose-50 border border-rose-200 text-rose-950 flex items-start gap-3">
@@ -686,7 +538,7 @@ export const Recovery = () => {
         context={{
           categoryLabel: { en: 'Emergency Recovery Alert', hi: 'इमरजेंसी रिकवरी अलर्ट' },
           score: 100,
-          text: evidence.description || 'Reporting fraudulent transaction dispute.',
+          text: 'Reporting fraudulent transaction dispute.',
         }}
       />
     </div>
