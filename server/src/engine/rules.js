@@ -36,7 +36,7 @@ const URGENCY_PATTERNS = [
   /\blimited\s+(?:seats?|slots?)\b/i,
   /\bhurry\b/i,
   /\bstart\s+now\b/i,
-  // Hinglish
+  // Hinglish urgency
   /\bturant\b/i,
   /\babhi\b/i,
   /\baaj\s+hi\b/i,
@@ -44,6 +44,10 @@ const URGENCY_PATTERNS = [
   /\bkhata\s+band\b/i,
   /\bband\s+ho\s+jayega\b/i,
   /\bkat\s+jayega\b/i,
+  // Urgent promotional calls-to-action
+  /\b(?:join|act|register|invest|apply)\s+(?:now|today|fast)\b/i,
+  /\bright\s+now\b/i,
+  /\bVIP\b/i,
 ];
 
 const PAYMENT_DEMAND_PATTERNS = [
@@ -55,7 +59,9 @@ const PAYMENT_DEMAND_PATTERNS = [
   /\bsend\s+money\b/i,
   /\btransfer\s+money\b/i,
   /\bgift\s+card\b/i,
-  // Hinglish
+  // Hinglish payment demands
+  /\b(?:\d+\s*)?(?:rupaye|rs\.?|inr|paise)\s*(?:bhejo|daalo|karo|transfer\s*karo|pay\s*karo|send\s*karo)\b/i,
+  /\b(?:bhejo|daalo|send|transfer)\s+(?:\d+\s*)?(?:rupaye|rs\.?|inr|paise)\b/i,
   /\bpaise\s+bhejo\b/i,
   /\bpayment\s+karo\b/i,
   /\bfees?\s+bhejo\b/i,
@@ -93,7 +99,7 @@ const IMPERSONATION_PATTERNS = [
   /\bgovernment\b/i,
   /\bTRAI\b/i,
   /\bofficer\b/i,
-  /\bbank\b/i,   // broad; safe-context gate prevents false positives on genuine alerts
+  /\b(?:bank|khata)\b/i,   // broad; safe-context gate prevents false positives on genuine alerts
   /\bFedEx\b/i,
   /\bCyber\s+Crime\b/i,
   /\bKBC\b/i,
@@ -157,10 +163,13 @@ export function scoreToLevel(score) {
 // AND has no payment demand, suspicious link, or urgency.
 
 const SAFE_WARNING_RE =
-  /\b(?:do\s+not|don't|never)\s+share\s+(?:your\s+)?(?:otp|code|pin)\b/i;
+  /\b(?:do\s+not|don't|never)\s+share\b/i;
 
 const DEBIT_CREDIT_RE =
   /\b(?:debited|credited|spent|withdrawn)\b.{0,80}\b(?:a\/c|account|card)\b/is;
+
+const DELIVERY_RE =
+  /\b(?:delivery\s+(?:partner|agent|boy)|out\s+for\s+delivery|order\s+is\s+arriving)\b/i;
 
 // ── Category detection (first match wins, in spec order) ─────────────────────
 function detectCategory(text, signals) {
@@ -176,7 +185,7 @@ function detectCategory(text, signals) {
   )
     return "REFUND_QR";
 
-  if (/\bKYC\b/i.test(text)) return "FAKE_KYC";
+  if (/\b(?:KYC|khata\s+band)\b/i.test(text)) return "FAKE_KYC";
 
   if (
     /\b(?:electricity|power|gas|water)\b/i.test(text) &&
@@ -287,14 +296,19 @@ export function analyzeRules(text) {
   ruleScore = Math.min(ruleScore, 100);
 
   // ── 5. Safe-context gate ──────────────────────────────────────────────────
-  // Genuine bank debit alerts and "never share OTP" messages must not be flagged.
+  // Genuine bank debit alerts, delivery OTPs, and "never share OTP" messages must not be flagged.
   const hasSafeWarning = SAFE_WARNING_RE.test(text);
   const hasDebitAlert  = DEBIT_CREDIT_RE.test(text);
+  const hasDelivery    = DELIVERY_RE.test(text);
+
+  const hasScamThreat =
+    /\b(?:block|arrest|disconnect|FIR|legal\s+action|kat\s+jayega|band\s+ho\s+jayega)\b/i.test(text);
+
   const safeContext =
-    (hasSafeWarning || hasDebitAlert) &&
+    (hasSafeWarning || hasDebitAlert || hasDelivery) &&
     paymentPhrases.length === 0 &&
     linkPhrases.length === 0 &&
-    urgencyPhrases.length === 0;
+    !hasScamThreat;
 
   if (safeContext) {
     ruleScore = Math.min(ruleScore, 15);

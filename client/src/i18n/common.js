@@ -5,6 +5,7 @@ export default {
     "common.nav.scan": "Scan",
     "common.nav.qrCheck": "QR Check",
     "common.nav.recovery": "Recovery",
+    "common.nav.lab": "Sim Lab",
     "common.disclaimer": "This is an AI copilot. Always verify details before paying."
   },
   hi: {
@@ -13,6 +14,7 @@ export default {
     "common.nav.scan": "स्कैन",
     "common.nav.qrCheck": "QR चेक",
     "common.nav.recovery": "रिकवरी",
+    "common.nav.lab": "सिम लैब",
     "common.disclaimer": "यह एक AI कोपायलट है। भुगतान करने से पहले हमेशा विवरण जांचें।"
   }
 };

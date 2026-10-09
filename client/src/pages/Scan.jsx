@@ -15,7 +15,14 @@ export const Scan = () => {
   const { setAnalysisResult } = useResult();
 
   const [tab, setTab] = useState('text');
-  const [text, setText] = useState('');
+  const [text, setText] = useState(() => {
+    const prefill = localStorage.getItem('tp_scan_prefill');
+    if (prefill) {
+      localStorage.removeItem('tp_scan_prefill');
+      return prefill;
+    }
+    return '';
+  });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 

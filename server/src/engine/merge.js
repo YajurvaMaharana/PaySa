@@ -55,6 +55,11 @@ export function merge(rules, ai, fallbackText = "") {
       finalScore = Math.max(finalScore, 40);
     }
 
+    // If AI detects high scam probability (>= 80) and rules also found scam signals (>= 35)
+    if (aiScore >= 80 && rules.ruleScore >= 35) {
+      finalScore = Math.max(finalScore, 65);
+    }
+
     finalScore = Math.min(100, Math.max(0, finalScore));
   } else {
     finalScore = rules.ruleScore;

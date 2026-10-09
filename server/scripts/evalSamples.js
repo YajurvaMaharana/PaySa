@@ -96,7 +96,8 @@ async function main() {
   console.log(headerLine);
   console.log(sepLine);
 
-  for (const sample of allSamples) {
+  for (let i = 0; i < allSamples.length; i++) {
+    const sample = allSamples[i];
     const res = await runPipeline(sample);
     results.push(res);
 
@@ -123,6 +124,10 @@ async function main() {
       pad(`${res.latencyMs}ms`, colWidths.latencyMs),
     ].join(" | ");
     console.log(line);
+
+    if (i < allSamples.length - 1 && process.env.GEMINI_API_KEY) {
+      await new Promise((r) => setTimeout(r, 1200));
+    }
   }
 
   const accuracy = ((correctMatches / allSamples.length) * 100).toFixed(1);

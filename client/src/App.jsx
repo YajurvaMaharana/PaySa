@@ -10,6 +10,7 @@ import { Result } from './pages/Result';
 import { QrCheck } from './pages/QrCheck';
 import { Recovery } from './pages/Recovery';
 import { Radar } from './pages/Radar';
+import { SimulationLab } from './pages/SimulationLab';
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
               <Route path="qr" element={<QrCheck />} />
               <Route path="recovery" element={<Recovery />} />
               <Route path="radar" element={<Radar />} />
+              <Route path="simulate" element={<SimulationLab />} />
             </Route>
           </Routes>
         </BrowserRouter>
