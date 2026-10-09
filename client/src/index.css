@@ -24,3 +24,8 @@
     -webkit-font-smoothing: antialiased;
   }
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+

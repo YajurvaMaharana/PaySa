@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "label": "Bank KYC",
+    "text": "Dear Customer, your HDFC bank account will be blocked today. Update PAN card immediately via link: http://bit.ly/kyc-update"
+  },
+  {
+    "id": 2,
+    "label": "Lottery",
+    "text": "Congratulations! Your mobile number won Rs 25,00,000 in KBC Lottery. Pay Rs 5000 tax processing fee to claim."
+  },
+  {
+    "id": 3,
+    "label": "Electricity",
+    "text": "Dear consumer, your electricity power will be disconnected at 9:30 PM tonight. Please call our officer immediately on 9876543210."
+  },
+  {
+    "id": 4,
+    "label": "Job Offer",
+    "text": "Part-time job offer! Earn Rs 3000-5000 daily working from home just by liking YouTube videos. Message us to start now."
+  },
+  {
+    "id": 5,
+    "label": "Customs Parcel",
+    "text": "FedEx: Your parcel is held at Mumbai Customs due to unpaid clearance fees. Pay Rs 999 immediately via this link to release it."
+  },
+  {
+    "id": 6,
+    "label": "Police FIR",
+    "text": "Cyber Crime Alert: FIR filed against this number for illegal activity. Download QuickSupport app immediately for police verification."
+  },
+  {
+    "id": 7,
+    "label": "QR Refund",
+    "text": "Your refund of Rs 1500 has been approved. Please open PhonePe, scan this QR code and enter your UPI PIN to receive the money."
+  },
+  {
+    "id": 8,
+    "label": "Investment",
+    "text": "Guaranteed 50% returns in 7 days! Join our premium VIP crypto trading group today. Transfer min Rs 10000 to start."
+  }
+]
