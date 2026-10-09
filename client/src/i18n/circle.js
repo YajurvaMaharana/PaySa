@@ -1,0 +1,42 @@
+export default {
+  en: {
+    "circle.title": "Tell a Trusted Person",
+    "circle.subtitle": "Let someone know what's happening so they can guide you.",
+    "circle.addContact": "Add contact",
+    "circle.namePlaceholder": "Name",
+    "circle.phonePlaceholder": "10-digit mobile number",
+    "circle.invalidPhone": "Please enter a valid 10-digit Indian phone number.",
+    "circle.addBtn": "Add",
+    "circle.includeTextToggle": "Include the original message text for context",
+    "circle.demoExplainer": "Demo: The primary button simulates an alert. Tap WhatsApp or SMS to actually send.",
+    "circle.alertTemplate": "TrustPause alert: I received a message that looks like a scam ({categoryLabel}, risk {score}/100). I have paused and will not pay. Please call me before I do anything.",
+    "circle.genericAlert": "TrustPause alert: I need help - I may have been scammed. Please call me immediately.",
+    "circle.sendDemo": "Send alert (demo)",
+    "circle.sendWhatsApp": "Send on WhatsApp",
+    "circle.sendSMS": "Send by SMS",
+    "circle.success": "Alert sent to {name}!",
+    "circle.contact.mom": "Mom (Demo)",
+    "circle.contact.rahul": "Rahul - brother (Demo)",
+    "circle.close": "Close"
+  },
+  hi: {
+    "circle.title": "भरोसेमंद व्यक्ति को बताएँ",
+    "circle.subtitle": "किसी को बताएँ कि क्या हो रहा है ताकि वे आपकी मदद कर सकें।",
+    "circle.addContact": "नया नंबर जोड़ें",
+    "circle.namePlaceholder": "नाम",
+    "circle.phonePlaceholder": "10-अंकों का मोबाइल नंबर",
+    "circle.invalidPhone": "कृपया सही 10-अंकों का नंबर दर्ज करें।",
+    "circle.addBtn": "जोड़ें",
+    "circle.includeTextToggle": "ओरिजिनल मैसेज भी साथ भेजें",
+    "circle.demoExplainer": "डेमो: मुख्य बटन केवल दिखावे के लिए है। असल में भेजने के लिए WhatsApp या SMS पर टैप करें।",
+    "circle.alertTemplate": "TrustPause अलर्ट: मुझे एक मैसेज मिला है जो फ्रॉड लग रहा है ({categoryLabel}, ख़तरा {score}/100)। मैंने अभी कोई पेमेंट नहीं की है। कृपया कुछ भी करने से पहले मुझे कॉल करें।",
+    "circle.genericAlert": "TrustPause अलर्ट: मुझे मदद चाहिए - शायद मेरे साथ कोई फ्रॉड हुआ है। कृपया मुझे तुरंत कॉल करें।",
+    "circle.sendDemo": "अलर्ट भेजें (डेमो)",
+    "circle.sendWhatsApp": "WhatsApp पर भेजें",
+    "circle.sendSMS": "SMS से भेजें",
+    "circle.success": "{name} को अलर्ट भेज दिया गया!",
+    "circle.contact.mom": "मम्मी (डेमो)",
+    "circle.contact.rahul": "राहुल - भाई (डेमो)",
+    "circle.close": "बंद करें"
+  }
+};

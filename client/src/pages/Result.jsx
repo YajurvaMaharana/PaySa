@@ -6,6 +6,7 @@ import { useResult } from '../state/ResultContext';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { BottomSheet } from '../components/ui/BottomSheet';
+import SafetyCircleModal from '../components/SafetyCircleModal';
 
 const SIGNAL_COLORS = {
   URGENCY: 'bg-orange-100 text-orange-800 border-orange-200',
@@ -376,12 +377,15 @@ export const Result = () => {
         </div>
       </BottomSheet>
 
-      <BottomSheet isOpen={trustedModalOpen} onClose={() => setTrustedModalOpen(false)} title={t('result.modal.trusted.title')}>
-        <div className="space-y-4 pt-2">
-          <p className="text-gray-700">{t('result.modal.trusted.text')}</p>
-          <Button className="w-full mt-4" onClick={() => setTrustedModalOpen(false)}>Close</Button>
-        </div>
-      </BottomSheet>
+      <SafetyCircleModal 
+        open={trustedModalOpen} 
+        onClose={() => setTrustedModalOpen(false)} 
+        context={{
+          categoryLabel: result.categoryLabel,
+          score: result.score,
+          text: result.extractedText || resultData.text
+        }} 
+      />
     </div>
   );
 };
