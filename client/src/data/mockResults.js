@@ -68,7 +68,23 @@ export const mockResults = [
       },
       dnaHash: "DNA-JOBT-94U-0A-80P",
       campaignClusterMatch: "This message resembles 22 anonymized task/job scam examples."
-    }
+    },
+    scamTwins: [
+      {
+        id: "mock1",
+        category: "JOB_TASK",
+        similarityPercent: 88,
+        redactedSnippet: "Part-time job offer! Earn [PHONE REDACTED] daily working from home just by liking YouTube videos.",
+        tacticsMatched: ["earn", "job", "youtube", "daily", "videos"]
+      },
+      {
+        id: "mock2",
+        category: "JOB_TASK",
+        similarityPercent: 65,
+        redactedSnippet: "Earn Rs 5000 daily working from home. Message us to start now.",
+        tacticsMatched: ["earn", "daily", "working", "home"]
+      }
+    ]
   },
   {
     id: "mock-medium",

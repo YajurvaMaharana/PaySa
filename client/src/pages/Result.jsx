@@ -9,6 +9,7 @@ import { BottomSheet } from '../components/ui/BottomSheet';
 import SafetyCircleModal from '../components/SafetyCircleModal';
 import { PanicMeter } from '../components/PanicMeter';
 import { ScamDnaCard } from '../components/ScamDnaCard';
+import { ScamTwins } from '../components/ScamTwins';
 
 const SIGNAL_COLORS = {
   URGENCY: 'bg-orange-100 text-orange-800 border-orange-200',
@@ -225,6 +226,7 @@ export const Result = () => {
       </Card>
 
       <PanicMeter panicMeter={result.panicMeter} />
+      <ScamTwins scamTwins={result.scamTwins} categoryLabel={result.categoryLabel[lang]} />
 
       {/* Primary Actions */}
       <div className="space-y-3">
