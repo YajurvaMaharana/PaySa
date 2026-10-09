@@ -1,0 +1,30 @@
+[
+  {
+    "id": "e01",
+    "label": "Hinglish account block scam",
+    "text": "aapka khata band ho jayega, turant 10 rupaye bhejo",
+    "expectedLevel": "HIGH",
+    "expectedCategory": "FAKE_KYC"
+  },
+  {
+    "id": "e02",
+    "label": "Friend dinner split",
+    "text": "Hey, can you send Rs 450 for yesterday's dinner when you get time?",
+    "expectedLevel": "LOW",
+    "expectedCategory": "NONE"
+  },
+  {
+    "id": "e03",
+    "label": "Real delivery OTP",
+    "text": "Your order is arriving today. Share OTP 482910 with delivery partner only at delivery time. Do not share with anyone else.",
+    "expectedLevel": "LOW",
+    "expectedCategory": "NONE"
+  },
+  {
+    "id": "e04",
+    "label": "Telegram investment scam",
+    "text": "Guaranteed 30% returns, pay Rs 2000 to join our VIP channel now: t.me/super_returns",
+    "expectedLevel": "HIGH",
+    "expectedCategory": "INVESTMENT"
+  }
+]

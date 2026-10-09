@@ -133,7 +133,7 @@ export async function analyzeWithGemini({ text, image, mimeType }) {
     throw new Error("GEMINI_API_KEY is not configured.");
   }
 
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-3.5-flash";
   const ai = new GoogleGenAI({ apiKey });
 
   // Build content parts
@@ -166,7 +166,7 @@ export async function analyzeWithGemini({ text, image, mimeType }) {
 
   const generateWithTimeout = async () => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     try {
       const response = await ai.models.generateContent({
