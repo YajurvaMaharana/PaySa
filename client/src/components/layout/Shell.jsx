@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
-import { Shield, ScanLine, QrCode, ShieldAlert } from 'lucide-react';
+import { Shield, ScanLine, QrCode, ShieldAlert, Radio } from 'lucide-react';
 import { useT } from '../../i18n';
 
 export const Shell = () => {
@@ -43,31 +43,40 @@ export const Shell = () => {
           <NavLink 
             to="/" 
             className={({ isActive }) => 
-              `flex-1 flex flex-col items-center justify-center gap-1 text-xs font-medium transition-colors ${isActive ? 'text-brand' : 'text-gray-500 hover:text-gray-900'}`
+              `flex-1 flex flex-col items-center justify-center gap-1 text-[10px] sm:text-xs font-medium transition-colors ${isActive ? 'text-brand' : 'text-gray-500 hover:text-gray-900'}`
             }
           >
-            <ScanLine className="h-6 w-6" />
+            <ScanLine className="h-5 w-5 sm:h-6 sm:w-6" />
             <span>{t('common.nav.scan')}</span>
           </NavLink>
           
           <NavLink 
             to="/qr" 
             className={({ isActive }) => 
-              `flex-1 flex flex-col items-center justify-center gap-1 text-xs font-medium transition-colors ${isActive ? 'text-brand' : 'text-gray-500 hover:text-gray-900'}`
+              `flex-1 flex flex-col items-center justify-center gap-1 text-[10px] sm:text-xs font-medium transition-colors ${isActive ? 'text-brand' : 'text-gray-500 hover:text-gray-900'}`
             }
           >
-            <QrCode className="h-6 w-6" />
+            <QrCode className="h-5 w-5 sm:h-6 sm:w-6" />
             <span>{t('common.nav.qrCheck')}</span>
           </NavLink>
           
           <NavLink 
             to="/recovery" 
             className={({ isActive }) => 
-              `flex-1 flex flex-col items-center justify-center gap-1 text-xs font-medium transition-colors ${isActive ? 'text-brand' : 'text-gray-500 hover:text-gray-900'}`
+              `flex-1 flex flex-col items-center justify-center gap-1 text-[10px] sm:text-xs font-medium transition-colors ${isActive ? 'text-brand' : 'text-gray-500 hover:text-gray-900'}`
             }
           >
-            <ShieldAlert className="h-6 w-6" />
+            <ShieldAlert className="h-5 w-5 sm:h-6 sm:w-6" />
             <span>{t('common.nav.recovery')}</span>
+          </NavLink>
+          <NavLink 
+            to="/radar" 
+            className={({ isActive }) => 
+              `flex-1 flex flex-col items-center justify-center gap-1 text-[10px] sm:text-xs font-medium transition-colors ${isActive ? 'text-brand' : 'text-gray-500 hover:text-gray-900'}`
+            }
+          >
+            <Radio className="h-5 w-5 sm:h-6 sm:w-6" />
+            <span>Radar</span>
           </NavLink>
         </div>
       </nav>

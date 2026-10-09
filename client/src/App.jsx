@@ -9,6 +9,7 @@ import { Scan } from './pages/Scan';
 import { Result } from './pages/Result';
 import { QrCheck } from './pages/QrCheck';
 import { Recovery } from './pages/Recovery';
+import { Radar } from './pages/Radar';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
               <Route path="result" element={<Result />} />
               <Route path="qr" element={<QrCheck />} />
               <Route path="recovery" element={<Recovery />} />
+              <Route path="radar" element={<Radar />} />
             </Route>
           </Routes>
         </BrowserRouter>
