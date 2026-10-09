@@ -1,99 +1,141 @@
-// server/src/routes/analyze.js – POST /api/analyze (hardcoded mock for scaffold)
+// server/src/routes/analyze.js – POST /api/analyze hybrid endpoint
+// Read PROJECT_CONTEXT.md before every edit.
+// Hard rule: Never log message content. Log only { level, source, latencyMs }.
+
 import { Router } from "express";
-import { randomUUID } from "node:crypto";
+import { analyzeRules } from "../engine/rules.js";
+import { analyzeWithGemini } from "../engine/gemini.js";
+import { merge } from "../engine/merge.js";
+import { redact } from "../engine/redact.js";
 
 const router = Router();
+const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+const MAX_IMAGE_BYTES = 6 * 1024 * 1024; // 6 MB binary limit
 
-router.post("/", (req, res) => {
-  const { text, image, language = "en" } = req.body ?? {};
+router.post("/", async (req, res) => {
+  const startTime = performance.now();
 
-  // Basic input validation
-  if (!text && !image) {
-    return res.status(400).json({
-      error: "BAD_INPUT",
-      message: "Provide at least one of: text or image.",
+  try {
+    const { text, image, mimeType } = req.body ?? {};
+
+    // ── 1. Input validation ───────────────────────────────────────────────────
+    if (!text && !image) {
+      return res.status(400).json({
+        error: "BAD_INPUT",
+        message: "Provide at least one of: text or image.",
+      });
+    }
+
+    if (text !== undefined && typeof text !== "string") {
+      return res.status(400).json({
+        error: "BAD_INPUT",
+        message: "Text must be a string.",
+      });
+    }
+
+    if (text && text.length > 4000) {
+      return res.status(400).json({
+        error: "TOO_LARGE",
+        message: "Text exceeds 4000 character limit.",
+      });
+    }
+
+    let cleanImage = null;
+    let cleanMime = "image/png";
+
+    if (image !== undefined) {
+      if (typeof image !== "string" || !image.trim()) {
+        return res.status(400).json({
+          error: "BAD_INPUT",
+          message: "Image must be a valid base64 string.",
+        });
+      }
+
+      // Strip optional data: URI prefix if present
+      cleanImage = image.replace(/^data:image\/[a-zA-Z+]+;base64,/, "").trim();
+
+      // Check base64 size against 6MB limit
+      const approxBinaryBytes = Math.ceil((cleanImage.length * 3) / 4);
+      if (approxBinaryBytes > MAX_IMAGE_BYTES) {
+        return res.status(400).json({
+          error: "TOO_LARGE",
+          message: "Image exceeds 6MB limit.",
+        });
+      }
+
+      if (mimeType) {
+        if (!ALLOWED_MIME_TYPES.has(mimeType)) {
+          return res.status(400).json({
+            error: "BAD_INPUT",
+            message: "Unsupported image format. Allowed: image/jpeg, image/png, image/webp.",
+          });
+        }
+        cleanMime = mimeType;
+      }
+    }
+
+    // ── 2. Analysis Execution ────────────────────────────────────────────────
+    let finalResponse;
+
+    if (cleanImage) {
+      // Image workflow: Call Gemini first (it OCRs), then run rules on extractedText
+      if (!process.env.GEMINI_API_KEY) {
+        return res.status(422).json({
+          error: "IMAGE_READ_FAILED",
+          message: "We couldn't read this screenshot. Please paste the text instead.",
+        });
+      }
+
+      let aiResult;
+      try {
+        const redactedUserText = text ? redact(text) : undefined;
+        aiResult = await analyzeWithGemini({
+          text: redactedUserText,
+          image: cleanImage,
+          mimeType: cleanMime,
+        });
+      } catch (_err) {
+        return res.status(422).json({
+          error: "IMAGE_READ_FAILED",
+          message: "We couldn't read this screenshot. Please paste the text instead.",
+        });
+      }
+
+      const ocrText = aiResult.extractedText || "";
+      const combinedText = [ocrText, text].filter(Boolean).join("\n");
+      const rulesResult = analyzeRules(combinedText);
+      finalResponse = merge(rulesResult, aiResult, combinedText);
+    } else {
+      // Text-only workflow: run rules(text) and Gemini(redacted text) in parallel
+      const rawText = text.trim();
+      const redactedText = redact(rawText);
+
+      const rulesPromise = Promise.resolve().then(() => analyzeRules(rawText));
+      const aiPromise = process.env.GEMINI_API_KEY
+        ? analyzeWithGemini({ text: redactedText }).catch(() => null)
+        : Promise.resolve(null);
+
+      const [rulesResult, aiResult] = await Promise.all([rulesPromise, aiPromise]);
+      finalResponse = merge(rulesResult, aiResult, rawText);
+    }
+
+    // ── 3. Hard rule: Log ONLY { level, source, latencyMs } ───────────────────
+    const latencyMs = Math.round(performance.now() - startTime);
+    console.log(
+      JSON.stringify({
+        level: finalResponse.level,
+        source: finalResponse.source,
+        latencyMs,
+      })
+    );
+
+    return res.json(finalResponse);
+  } catch (_error) {
+    return res.status(500).json({
+      error: "SERVER_ERROR",
+      message: "An unexpected error occurred while analyzing the message.",
     });
   }
-  if (text && text.length > 4000) {
-    return res.status(400).json({
-      error: "TOO_LARGE",
-      message: "Text exceeds 4000 character limit.",
-    });
-  }
-
-  // ── HARDCODED mock: HIGH-risk FAKE_KYC example ───────────────────────────
-  const mock = {
-    id: randomUUID(),
-    score: 88,
-    level: "HIGH",
-    recommendation: "PAUSE",
-    category: "FAKE_KYC",
-    categoryLabel: {
-      en: "Fake KYC Update",
-      hi: "नकली KYC अपडेट",
-    },
-    extractedText:
-      text ||
-      "Your account will be blocked today. Complete KYC immediately by paying ₹1 fee and sharing your OTP to verify.",
-    signals: [
-      {
-        type: "URGENCY",
-        phrase: "blocked today",
-        weight: 30,
-        reason: {
-          en: "Creates artificial urgency with a deadline to pressure immediate action.",
-          hi: "तुरंत कार्रवाई के लिए दबाव बनाने हेतु कृत्रिम तात्कालिकता पैदा की गई है।",
-        },
-      },
-      {
-        type: "PAYMENT_DEMAND",
-        phrase: "paying ₹1 fee",
-        weight: 25,
-        reason: {
-          en: "Requests a small payment as a pretext to capture payment details.",
-          hi: "भुगतान विवरण प्राप्त करने के बहाने एक छोटी राशि मांगी जा रही है।",
-        },
-      },
-      {
-        type: "IMPERSONATION",
-        phrase: "KYC",
-        weight: 15,
-        reason: {
-          en: "Impersonates official bank/regulatory KYC process to appear legitimate.",
-          hi: "वैध दिखने के लिए आधिकारिक बैंक/नियामक KYC प्रक्रिया का रूप धारण किया गया है।",
-        },
-      },
-    ],
-    explanation: {
-      en: "This message is a classic Fake KYC scam. It uses fear of account blocking, demands a small payment to steal your card/UPI details, and impersonates an official KYC process. Legitimate banks never ask you to pay a fee or share an OTP to complete KYC.",
-      hi: "यह संदेश एक क्लासिक नकली KYC घोटाला है। यह खाता ब्लॉक होने के डर का उपयोग करता है, आपके कार्ड/UPI विवरण चुराने के लिए एक छोटी राशि मांगता है, और आधिकारिक KYC प्रक्रिया का रूप धारण करता है। असली बैंक कभी भी KYC पूरा करने के लिए शुल्क या OTP नहीं मांगते।",
-    },
-    nextSteps: {
-      en: [
-        "Do NOT pay any amount or share OTP/PIN.",
-        "Call your bank's official helpline (number on the back of your card).",
-        "Report the number/message to cybercrime.gov.in.",
-        "Block the sender's number.",
-      ],
-      hi: [
-        "कोई भी राशि न दें और OTP/PIN साझा न करें।",
-        "अपने बैंक के आधिकारिक हेल्पलाइन नंबर पर कॉल करें (कार्ड के पीछे का नंबर)।",
-        "नंबर/संदेश की सूचना cybercrime.gov.in पर दें।",
-        "प्रेषक का नंबर ब्लॉक करें।",
-      ],
-    },
-    ruleScore: 88,
-    aiScore: null,
-    source: "AI+RULES",
-    disclaimer: {
-      en: "This is a safety recommendation, not a guarantee. TrustPause does not stop fraud.",
-      hi: "यह एक सुरक्षा सुझाव है, गारंटी नहीं। TrustPause धोखाधड़ी नहीं रोकता।",
-    },
-  };
-  // ── Log only metadata, never message content (hard rule) ─────────────────
-  console.log(`[analyze] level=${mock.level} source=${mock.source} score=${mock.score}`);
-
-  return res.json(mock);
 });
 
 export default router;
