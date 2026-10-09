@@ -198,7 +198,7 @@ export const Scan = () => {
     <div className="space-y-6">
       {/* Header section */}
       <div className="space-y-2 text-center sm:text-left pt-2">
-        <h2 className="text-2xl font-bold text-navy tracking-tight">
+        <h2 className="text-2xl font-bold text-navy tracking-tight leading-tight">
           {t('scan.headline')}
         </h2>
         <p className="text-gray-600">

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const Button = ({ children, variant = 'primary', className = '', isLoading, ...props }) => {
-  const baseStyles = "inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none min-h-[48px] px-4 py-2";
+  const baseStyles = "inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none min-h-[48px] px-4 py-2 break-words leading-tight";
   
   const variants = {
     primary: "bg-brand text-white hover:bg-brand-teal/90 focus:ring-brand",

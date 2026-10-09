@@ -191,18 +191,18 @@ export const Result = () => {
   };
 
   return (
-    <div className="space-y-6 pb-20 animate-in fade-in slide-in-from-bottom-4">
+    <div className="space-y-5 pb-24 animate-in fade-in slide-in-from-bottom-4">
       {/* Header Block */}
-      <div className={`-mx-4 -mt-6 p-6 pb-8 ${headerColors[level]} shadow-sm`}>
-        <div className="flex flex-col items-center text-center space-y-3">
-          <HeaderIcon className="h-12 w-12 opacity-90" />
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
+      <div className={`-mx-4 -mt-6 p-5 pb-8 ${headerColors[level]} shadow-sm`}>
+        <div className="flex flex-col items-center text-center space-y-2">
+          <HeaderIcon className="h-10 w-10 opacity-90" />
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight leading-tight">
             {t(`result.header.${level}`)}
           </h2>
         </div>
       </div>
 
-      <Card className="relative -mt-6 bg-white shadow-md p-6 flex flex-col items-center border-t-0 rounded-t-3xl rounded-b-xl">
+      <Card className="relative -mt-8 bg-white shadow-md p-5 flex flex-col items-center border-t-0 rounded-t-3xl rounded-b-xl">
         <Gauge score={result.score} level={level} />
         
         <div className="mt-4 text-center">
