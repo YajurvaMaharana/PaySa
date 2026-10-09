@@ -111,14 +111,22 @@ export const Scan = () => {
           const compressed = await compressImage(imageFile);
           base64 = compressed.base64;
           mimeType = compressed.mimeType;
-        } catch (imgErr) {
-          throw new Error(imgErr.message === 'unsupportedImage' ? 'unsupportedImage' : 'IMAGE_READ_FAILED');
+        } catch (_imgErr) {
+          const reader = new FileReader();
+          const dataUrl = await new Promise((resolve, reject) => {
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(imageFile);
+          });
+          base64 = dataUrl;
+          mimeType = imageFile.type || 'image/png';
         }
       }
 
       const result = await analyze({
-        text: tab === 'text' ? text.trim() : '',
+        text: tab === 'text' ? text.trim() : (text.trim() || ''),
         image: base64,
+        imageBase64: base64,
         mimeType: mimeType,
         language: lang
       });

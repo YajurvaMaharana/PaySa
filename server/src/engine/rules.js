@@ -35,6 +35,7 @@ const URGENCY_PATTERNS = [
   /\bFIR\b/,
   /\blimited\s+(?:seats?|slots?)\b/i,
   /\bhurry\b/i,
+  /\bstart\s+now\b/i,
   // Hinglish
   /\bturant\b/i,
   /\babhi\b/i,
@@ -46,9 +47,10 @@ const URGENCY_PATTERNS = [
 ];
 
 const PAYMENT_DEMAND_PATTERNS = [
-  /\b(?:send|pay|transfer)\s+(?:Rs\.?|INR|rupees?)\s*[\d,]+/i,
+  /\b(?:send|pay|transfer)\s+(?:(?:min|minimum)\s+)?(?:Rs\.?|INR|rupees?)\s*[\d,]+/i,
   /\bpay(?:ing)?\s+(?:a\s+)?(?:fee|charge|deposit|tax|fine)\b/i,
-  /\b(?:registration|processing|clearance|refund)\s+fee\b/i,
+  /\b(?:registration|processing|clearance|refund|tax)\s+fees?\b/i,
+  /\btax\s+processing\s+fee\b/i,
   /\bscan\s+(?:this\s+|the\s+)?QR\b/i,
   /\bsend\s+money\b/i,
   /\btransfer\s+money\b/i,
@@ -74,6 +76,7 @@ const CREDENTIAL_REQUEST_PATTERNS = [
   /\binstall\s+(?:app|APK)\b/i,
   /\bshare\s+the\s+code\b/i,
   /\bAadhaar\s+number\b/i,
+  /\bPAN\s*(?:card)?\b/i,
 ];
 
 const IMPERSONATION_PATTERNS = [
@@ -85,12 +88,16 @@ const IMPERSONATION_PATTERNS = [
   /\bpolice\b/i,
   /\bcustoms\b/i,
   /\bcourier\b/i,
-  /\belectricity\s+board\b/i,
+  /\belectricity(?:\s+board|\s+power)?\b/i,
   /\bincome\s+tax\b/i,
   /\bgovernment\b/i,
   /\bTRAI\b/i,
   /\bofficer\b/i,
   /\bbank\b/i,   // broad; safe-context gate prevents false positives on genuine alerts
+  /\bFedEx\b/i,
+  /\bCyber\s+Crime\b/i,
+  /\bKBC\b/i,
+  /\bHDFC\b/i,
 ];
 
 // Ordered so that the most distinctive pattern gets the weight slot when both SL and TGTBT fire
@@ -106,14 +113,15 @@ const SUSPICIOUS_LINK_PATTERNS = [
 ];
 
 const TGTBT_PATTERNS = [
-  /\bearn\s+(?:Rs\.?|INR|rupees?)?\s*[\d,]+\s+per\s+day\b/i,
-  /\bliking\s+videos?\b/i,
-  /\b(?:like|rate)\s+videos?\s+for\s+(?:money|income)\b/i,
+  /\bearn\s+(?:Rs\.?|INR|rupees?)?\s*[\d,-]+(?:\s*(?:per\s+day|daily))\b/i,
+  /\blik(?:ing|e)?\s+(?:\w+\s+)?videos?\b/i,
+  /\b(?:work|working)\s+from\s+home\b/i,
+  /\bguaranteed\s+(?:\d+%\s+)?returns?\b/i,
+  /\bpart[- ]time\s+job\b/i,
   /\blucky\s+draw\b/i,
   /\blottery\b/i,
   /\b(?:won|win(?:ning)?)\b/i,
   /\bprize\b/i,
-  /\bguaranteed\s+returns?\b/i,
   /\bdouble\s+your\s+money\b/i,
   /\beasy\s+work\s+from\s+home\b/i,
 ];
