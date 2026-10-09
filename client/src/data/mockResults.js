@@ -52,6 +52,22 @@ export const mockResults = [
     disclaimer: {
       en: "This is an AI recommendation. Always exercise caution.",
       hi: "यह AI की सलाह है। हमेशा सावधानी बरतें।"
+    },
+    scamDna: {
+      fingerprint: {
+        category: "JOB_TASK",
+        language: "english",
+        urgency: 0.94,
+        fear: 0.1,
+        payment_demand: 0.8,
+        authority_impersonation: 0.0,
+        credential_harvesting: 0.0,
+        contains_link: false,
+        channel: "sms",
+        risk_score: 85
+      },
+      dnaHash: "DNA-JOBT-94U-0A-80P",
+      campaignClusterMatch: "This message resembles 22 anonymized task/job scam examples."
     }
   },
   {
@@ -105,6 +121,22 @@ export const mockResults = [
     disclaimer: {
       en: "This is an AI recommendation. Always exercise caution.",
       hi: "यह AI की सलाह है। हमेशा सावधानी बरतें।"
+    },
+    scamDna: {
+      fingerprint: {
+        category: "AUTHORITY_ARREST",
+        language: "english",
+        urgency: 0.3,
+        fear: 0.88,
+        payment_demand: 0.95,
+        authority_impersonation: 0.92,
+        credential_harvesting: 0.0,
+        contains_link: false,
+        channel: "sms",
+        risk_score: 55
+      },
+      dnaHash: "DNA-AUTH-30U-92A-95P",
+      campaignClusterMatch: "This message resembles 14 anonymized fake-fine scam examples."
     }
   },
   {

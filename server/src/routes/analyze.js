@@ -7,6 +7,8 @@ import { analyzeRules } from "../engine/rules.js";
 import { analyzeWithGemini } from "../engine/gemini.js";
 import { merge } from "../engine/merge.js";
 import { redact } from "../engine/redact.js";
+import { calculatePanicTactics } from "../engine/panicMeter.js";
+import { generateScamDNA } from "../engine/dna.js";
 
 const router = Router();
 const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
@@ -130,6 +132,8 @@ router.post("/", async (req, res) => {
       const combinedText = [ocrText, text].filter(Boolean).join("\n");
       const rulesResult = analyzeRules(combinedText);
       finalResponse = merge(rulesResult, aiResult, combinedText);
+      finalResponse.panicMeter = calculatePanicTactics(combinedText, finalResponse.signals);
+      finalResponse.scamDna = generateScamDNA(finalResponse, combinedText);
     } else {
       // Text-only workflow: run rules(text) and Gemini(redacted text) in parallel
       const rawText = text.trim();
@@ -142,6 +146,8 @@ router.post("/", async (req, res) => {
 
       const [rulesResult, aiResult] = await Promise.all([rulesPromise, aiPromise]);
       finalResponse = merge(rulesResult, aiResult, rawText);
+      finalResponse.panicMeter = calculatePanicTactics(rawText, finalResponse.signals);
+      finalResponse.scamDna = generateScamDNA(finalResponse, rawText);
     }
 
     // ── 3. Hard rule: Log ONLY { level, source, latencyMs } ───────────────────
