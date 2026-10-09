@@ -14,7 +14,7 @@ export const generateScamDNA = (analysisResult, text) => {
 
   // Determine language roughly
   let language = 'english';
-  if (rawText.match(/[ा-ह]/)) {
+  if (rawText.match(/[\u0900-\u097F]/)) {
     language = 'hindi';
   } else if (rawText.match(/\b(hai|kya|karo|jaldi|abhi)\b/)) {
     language = 'hinglish';
@@ -29,7 +29,7 @@ export const generateScamDNA = (analysisResult, text) => {
   else if (rawText.length < 160) channel = 'sms';
 
   const categoryShort = category.replace(/_/g, '').substring(0, 4).toUpperCase() || "GEN";
-  const dnaHash = \`DNA-\${categoryShort}-\${Math.round(urgency * 100)}U-\${Math.round(authority_impersonation * 100)}A-\${Math.round(payment_demand * 100)}P\`;
+  const dnaHash = `DNA-${categoryShort}-${Math.round(urgency * 100)}U-${Math.round(authority_impersonation * 100)}A-${Math.round(payment_demand * 100)}P`;
 
   let clusterMatch = "This message resembles 14 anonymized scam examples.";
   if (category.includes("KYC")) {
