@@ -1,42 +1,26 @@
-/* client/src/index.css – TrustPause global styles */
 @import "@fontsource/inter/400.css";
 @import "@fontsource/inter/500.css";
 @import "@fontsource/inter/600.css";
 @import "@fontsource/inter/700.css";
 @import "tailwindcss";
 
-:root {
-  --color-navy: #0b1f3a;
-  --color-teal: #0e8f8e;
-  --color-high: #dc2626;
-  --color-medium: #f59e0b;
-  --color-low: #16a34a;
-  --color-bg: #f8fafc;
-  --max-width: 560px;
-  font-family: "Inter", system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #1e293b;
-  background-color: var(--color-bg);
+@theme {
+  --color-navy: #0B1F3A;
+  --color-brand-teal: #0E8F8E;
+  --color-brand: #0E8F8E;
+  --color-danger: #DC2626;
+  --color-warn: #F59E0B;
+  --color-safe: #16A34A;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  min-height: 100dvh;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Centre the single-column layout on wide screens */
-#root {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100dvh;
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+  }
+  body {
+    background-color: var(--color-gray-50, #f8fafc);
+    color: var(--color-gray-900, #1e293b);
+    -webkit-font-smoothing: antialiased;
+  }
 }

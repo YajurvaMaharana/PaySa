@@ -1,0 +1,76 @@
+import React from 'react';
+import { Outlet, NavLink } from 'react-router-dom';
+import { Shield, ScanLine, QrCode, ShieldAlert } from 'lucide-react';
+import { useT } from '../../i18n';
+
+export const Shell = () => {
+  const { lang, toggleLang, t } = useT();
+
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-50 pb-[safe-area-inset-bottom]">
+      {/* Sticky Header */}
+      <header className="sticky top-0 z-40 bg-navy text-white shadow-md pt-[safe-area-inset-top]">
+        <div className="max-w-xl mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Shield className="h-6 w-6 text-brand" />
+            <h1 className="text-xl font-bold tracking-tight">
+              {t('common.appName')}
+            </h1>
+          </div>
+          
+          <button 
+            onClick={toggleLang}
+            className="flex items-center bg-white/10 rounded-full p-1 text-sm font-medium transition-colors hover:bg-white/20"
+          >
+            <span className={`px-2 py-1 rounded-full ${lang === 'en' ? 'bg-brand text-white' : 'text-gray-300'}`}>
+              EN
+            </span>
+            <span className={`px-2 py-1 rounded-full ${lang === 'hi' ? 'bg-brand text-white' : 'text-gray-300'}`}>
+              हिंदी
+            </span>
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <main className="flex-1 w-full max-w-xl mx-auto px-4 py-6 pb-24">
+        <Outlet />
+      </main>
+
+      {/* Fixed Bottom Tab Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 pb-[safe-area-inset-bottom]">
+        <div className="max-w-xl mx-auto flex h-16">
+          <NavLink 
+            to="/" 
+            className={({ isActive }) => 
+              `flex-1 flex flex-col items-center justify-center gap-1 text-xs font-medium transition-colors ${isActive ? 'text-brand' : 'text-gray-500 hover:text-gray-900'}`
+            }
+          >
+            <ScanLine className="h-6 w-6" />
+            <span>{t('common.nav.scan')}</span>
+          </NavLink>
+          
+          <NavLink 
+            to="/qr" 
+            className={({ isActive }) => 
+              `flex-1 flex flex-col items-center justify-center gap-1 text-xs font-medium transition-colors ${isActive ? 'text-brand' : 'text-gray-500 hover:text-gray-900'}`
+            }
+          >
+            <QrCode className="h-6 w-6" />
+            <span>{t('common.nav.qrCheck')}</span>
+          </NavLink>
+          
+          <NavLink 
+            to="/recovery" 
+            className={({ isActive }) => 
+              `flex-1 flex flex-col items-center justify-center gap-1 text-xs font-medium transition-colors ${isActive ? 'text-brand' : 'text-gray-500 hover:text-gray-900'}`
+            }
+          >
+            <ShieldAlert className="h-6 w-6" />
+            <span>{t('common.nav.recovery')}</span>
+          </NavLink>
+        </div>
+      </nav>
+    </div>
+  );
+};
