@@ -1,0 +1,2 @@
+// server/test/ – Node built-in test suite (node --test test/)
+// Add test files here as the engine is implemented.

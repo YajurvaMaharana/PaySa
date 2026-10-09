@@ -1,0 +1,71 @@
+/* client/src/App.css – component-level styles for the placeholder */
+.tp-header {
+  width: 100%;
+  background-color: var(--color-navy);
+  color: #fff;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tp-header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.tp-tagline {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 0.1rem;
+}
+
+.tp-main {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 2rem 1.25rem;
+  flex: 1;
+}
+
+.tp-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 16px 0 rgba(11, 31, 58, 0.08);
+  text-align: center;
+}
+
+.tp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #e0f2fe;
+  color: var(--color-teal);
+  border-radius: 999px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.tp-card h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  margin-bottom: 0.5rem;
+}
+
+.tp-card p {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.tp-disclaimer {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-top: 2rem;
+  padding: 0 0.5rem;
+  text-align: center;
+}
