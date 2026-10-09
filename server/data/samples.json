@@ -1,0 +1,58 @@
+[
+  {
+    "id": "s01",
+    "label": "Fake KYC",
+    "text": "Dear Customer, your bank KYC expires today. Send Rs 10 immediately to kyc.verify@upi or click http://bank-kyc-update.in/verify to avoid account blocking.",
+    "expectedLevel": "HIGH",
+    "expectedCategory": "FAKE_KYC"
+  },
+  {
+    "id": "s02",
+    "label": "Refund QR",
+    "text": "Hi, I want to buy your sofa. I have sent Rs 15,000 to you. Scan this QR and enter your UPI PIN to receive the refund amount.",
+    "expectedLevel": "HIGH",
+    "expectedCategory": "REFUND_QR"
+  },
+  {
+    "id": "s03",
+    "label": "Electricity",
+    "text": "Your electricity connection will be disconnected tonight 9:30 PM due to unpaid bill. Call our officer 9876501234 immediately and pay Rs 10 to update.",
+    "expectedLevel": "HIGH",
+    "expectedCategory": "UTILITY_DISCONNECT"
+  },
+  {
+    "id": "s04",
+    "label": "Job offer",
+    "text": "Part-time job! Earn Rs 5,000 per day by liking videos. Pay Rs 500 registration fee to start. Join our Telegram group t.me/easyearn_jobs now. Limited seats.",
+    "expectedLevel": "HIGH",
+    "expectedCategory": "JOB_TASK"
+  },
+  {
+    "id": "s05",
+    "label": "Courier",
+    "text": "Your parcel is held at customs. Pay Rs 49 clearance fee at http://bit.ly/parcel-release to get delivery. Last chance today or it will be returned.",
+    "expectedLevel": "HIGH",
+    "expectedCategory": "COURIER_CUSTOMS"
+  },
+  {
+    "id": "s06",
+    "label": "Police call",
+    "text": "This is CBI officer. A parcel in your name contains illegal items. You are under digital arrest. Stay on this video call and transfer money to our secure account for verification.",
+    "expectedLevel": "HIGH",
+    "expectedCategory": "AUTHORITY_ARREST"
+  },
+  {
+    "id": "s07",
+    "label": "Real bank alert",
+    "text": "Rs 1,200 debited from A/c XX1234 at Big Bazaar on 09-Oct. If not you, call the number on your bank card. Never share OTP.",
+    "expectedLevel": "LOW",
+    "expectedCategory": "NONE"
+  },
+  {
+    "id": "s08",
+    "label": "Real OTP",
+    "text": "123456 is your OTP for login. Do not share it with anyone. Valid for 10 minutes.",
+    "expectedLevel": "LOW",
+    "expectedCategory": "NONE"
+  }
+]
